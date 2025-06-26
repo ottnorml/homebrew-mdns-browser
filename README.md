@@ -1,18 +1,22 @@
-# Ottnorml mdns-browser
+# Homebrew Tap for mdns-browser (by hrzlgnm)
 
-## How do I install these formulae?
+## Installation
 
-`brew install ottnorml/mdns-browser/<formula>`
+This tap repository contains the cask for [hrzlgnm's mdns-browser app](https://github.com/hrzlgnm/mdns-browser).
 
-Or `brew tap ottnorml/mdns-browser` and then `brew install <formula>`.
+You can install it as follows:
 
-Or, in a `brew bundle` `Brewfile`:
+```sh
+brew tap ottnorml/mdns-browser
+brew install --cask mdns-browser
+```
 
-```ruby
-tap "ottnorml/mdns-browser"
-brew "<formula>"
+or
+
+```sh
+brew install --cask ottnorml/mdns-browser/mdns-browser
 ```
 
 ## Documentation
 
-`brew help`, `man brew` or check [Homebrew's documentation](https://docs.brew.sh).
+For more information about Homebrew, see `brew help`, `man brew`, or visit the [Homebrew documentation](https://docs.brew.sh).
