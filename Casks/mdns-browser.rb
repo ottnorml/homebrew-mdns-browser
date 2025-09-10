@@ -1,7 +1,7 @@
 cask "mdns-browser" do
-  version "0.19.7"
+  version "0.23.1"
   # see https://github.com/hrzlgnm/mdns-browser/releases/download/mdns-browser-v#{version}/mdns-browser_#{version}_universal.dmg.sha256
-  sha256 "90ff967989452fc2ddb752cd087d5a8e9fb989aeab5964fa3f56094b83833cb8"
+  sha256 "29d6f89eb3263cb1bacc9042ba6a98e27721fc0acb156dd7b2e47d3634864f8e"
 
   url "https://github.com/hrzlgnm/mdns-browser/releases/download/mdns-browser-v#{version}/mdns-browser_#{version}_universal.dmg"
   name "mDNS-Browser"
