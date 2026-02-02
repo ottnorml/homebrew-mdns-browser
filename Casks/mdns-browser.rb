@@ -5,12 +5,12 @@ cask "mdns-browser" do
 
   url "https://github.com/hrzlgnm/mdns-browser/releases/download/mdns-browser-v#{version}/mdns-browser_#{version}_universal.dmg"
   name "mDNS-Browser"
-  desc "Graphical discovery, inspection and testing tool for mDNS services"
+  desc "Cross platform app written in Rust using Tauri and Leptos"
   homepage "https://github.com/hrzlgnm/mdns-browser"
 
   livecheck do
     url :url
-    regex(/^mdns-browser[._-]v?(\d+(?:\.\d+)+)$/i)
+    regex(/^mdns-browser-v?(\d+(?:\.\d+)+)$/i)
     strategy :github_releases do |json, regex|
       json.map do |release|
         next if release["draft"] || release["prerelease"]
