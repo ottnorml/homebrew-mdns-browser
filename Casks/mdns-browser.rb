@@ -1,18 +1,26 @@
 cask "mdns-browser" do
-  arch arm: "arm64", intel: "amd64"
-
   version "0.23.1"
   # see https://github.com/hrzlgnm/mdns-browser/releases/download/mdns-browser-v#{version}/mdns-browser_#{version}_universal.dmg.sha256
   sha256 "29d6f89eb3263cb1bacc9042ba6a98e27721fc0acb156dd7b2e47d3634864f8e"
 
   url "https://github.com/hrzlgnm/mdns-browser/releases/download/mdns-browser-v#{version}/mdns-browser_#{version}_universal.dmg"
   name "mDNS-Browser"
-  desc "Cross platform app written in Rust using tauri and leptos"
+  desc "Cross platform app written in Rust using Tauri and Leptos"
   homepage "https://github.com/hrzlgnm/mdns-browser"
 
   livecheck do
     url :url
-    strategy :github_latest
+    regex(/^mdns-browser-v?(\d+(?:\.\d+)+)$/i)
+    strategy :github_releases do |json, regex|
+      json.map do |release|
+        next if release["draft"] || release["prerelease"]
+
+        match = release["tag_name"]&.match(regex)
+        next if match.blank?
+
+        match[1]
+      end
+    end
   end
 
   depends_on macos: ">= :monterey"
