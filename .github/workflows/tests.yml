@@ -4,7 +4,15 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'Formula/**'
+      - 'Casks/**'
+      - '**.rb'
   pull_request:
+    paths:
+      - 'Formula/**'
+      - 'Casks/**'
+      - '**.rb'
 
 jobs:
   test-bot:
@@ -12,6 +20,7 @@ jobs:
       matrix:
         os: [ ubuntu-22.04, macos-15-intel, macos-26 ]
     runs-on: ${{ matrix.os }}
+    
     permissions:
       actions: read
       checks: read
