@@ -52,6 +52,12 @@ jobs:
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
 
+      - name: Configure Git user
+        uses: Homebrew/actions/git-user-config@main
+        with:
+          username: ${{ (github.event_name == 'workflow_dispatch' && github.actor) || 'dependabot[bot]' }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Bump packages
         uses: Homebrew/actions/bump-packages@876ff924bd08a9cb5f3cc6bc581054d6f545d0d5 # 2025-04-01, no tagged version
         with:
