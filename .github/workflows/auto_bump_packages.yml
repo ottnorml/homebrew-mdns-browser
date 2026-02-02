@@ -1,0 +1,62 @@
+name: Auto bump Formulas and Casks
+
+on:
+  schedule:
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: autobump-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  autobump:
+    runs-on: macos-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Set up Homebrew
+        uses: Homebrew/actions/setup-homebrew@main
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get packages to bump in this repository
+        id: packages
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # GitHub Actions sets this automatically.
+          # Fallback for local runs so the script doesn't error.
+          : "${GITHUB_OUTPUT:=/dev/stdout}"
+
+          list_rb_basename_sorted() {
+            local dir="$1"
+            [[ -d "$dir" ]] || return 0
+            find "$dir" -maxdepth 1 -type f -name '*.rb' -print \
+              | sed 's|.*/||; s|\.rb$||' \
+              | sort
+          }
+
+          formulae="$(list_rb_basename_sorted "Formula")"
+          casks="$(list_rb_basename_sorted "Casks")"
+
+          {
+            echo "formulae<<EOF"
+            echo "$formulae"
+            echo "EOF"
+            echo "casks<<EOF"
+            echo "$casks"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Bump packages
+        uses: Homebrew/actions/bump-packages@main
+        with:
+          # Token used to open PRs. GITHUB_TOKEN is sufficient for same-repo PRs.
+          token: ${{ secrets.GITHUB_TOKEN }}
+          formulae: ${{ steps.packages.outputs.formulae }}
+          casks: ${{ steps.packages.outputs.casks }}
+          fork: false
