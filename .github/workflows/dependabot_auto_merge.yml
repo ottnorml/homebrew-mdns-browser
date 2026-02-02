@@ -1,12 +1,16 @@
 name: Dependabot auto-merge (patch/minor)
 
 on:
-  pull_request:
+  pull_request_target:
+    types:
+      - labeled
 
 jobs:
   dependabot:
     runs-on: ubuntu-22.04
-    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    if: >
+      github.event.pull_request.user.login == 'dependabot[bot]' &&
+      github.event.label.name == 'dependencies'
     permissions:
       contents: write
       pull-requests: write
