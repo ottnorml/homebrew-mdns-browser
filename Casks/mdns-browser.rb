@@ -23,7 +23,7 @@ cask "mdns-browser" do
     end
   end
 
-  depends_on macos: ">= :high_sierra"
+  depends_on macos: ">= :monterey"
 
   app "mdns-browser.app"
   binary "#{appdir}/mdns-browser.app/Contents/MacOS/mdns-browser"
