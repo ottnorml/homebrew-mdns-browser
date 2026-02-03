@@ -62,7 +62,8 @@ jobs:
 
           # Delete any existing bump-* branches to avoid conflicts
           # The bump-packages action creates new branches
-          bump_branches=$(git branch -r | grep 'origin/bump-' | \
+          bump_branches=$(git branch -r | \
+            grep '^[[:space:]]*origin/bump-' | \
             sed 's|origin/||; s/^[[:space:]]*//; s/[[:space:]]*$//' || true)
 
           if [ -n "$bump_branches" ]; then
