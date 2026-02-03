@@ -66,7 +66,7 @@ jobs:
             sed 's|origin/||' | while read -r branch; do
             echo "Deleting remote branch: $branch"
             git push origin --delete "$branch" || true
-          done
+          done || true
 
       - name: Bump packages
         uses: Homebrew/actions/bump-packages@876ff924bd08a9cb5f3cc6bc581054d6f545d0d5 # 2025-04-01, no tagged version
