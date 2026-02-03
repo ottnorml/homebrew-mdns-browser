@@ -63,8 +63,8 @@ jobs:
           # Delete any existing bump-* branches to avoid conflicts
           # The bump-packages action creates new branches
           bump_branches=$(git branch -r | grep 'origin/bump-' | \
-            sed 's|origin/||' || true)
-          
+            sed 's|origin/||' | xargs || true)
+
           if [ -n "$bump_branches" ]; then
             echo "$bump_branches" | while read -r branch; do
               echo "Deleting remote branch: $branch"
