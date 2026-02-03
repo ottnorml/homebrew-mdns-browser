@@ -52,6 +52,30 @@ jobs:
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
 
+      - name: Clean up stale bump branches
+        shell: bash
+        run: |
+          set +e  # Don't exit on error for this step
+
+          # Get list of remote branches matching bump-* pattern
+          BUMP_BRANCHES=$(git ls-remote --heads origin 'bump-*' | awk '{print $2}' | sed 's|refs/heads/||' || true)
+
+          if [[ -n "$BUMP_BRANCHES" ]]; then
+            echo "Found stale bump branches to clean up:"
+            echo "$BUMP_BRANCHES"
+
+            # Delete each bump branch from remote
+            while IFS= read -r branch; do
+              branch=$(echo "$branch" | xargs)  # Trim whitespace
+              if [[ -n "$branch" ]]; then
+                echo "Deleting remote branch: $branch"
+                git push origin --delete "$branch" || echo "Failed to delete $branch (may already be gone)"
+              fi
+            done <<< "$BUMP_BRANCHES"
+          else
+            echo "No stale bump branches found"
+          fi
+
       - name: Bump packages
         uses: Homebrew/actions/bump-packages@876ff924bd08a9cb5f3cc6bc581054d6f545d0d5 # 2025-04-01, no tagged version
         with:
