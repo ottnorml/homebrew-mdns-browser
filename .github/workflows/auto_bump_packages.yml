@@ -52,6 +52,30 @@ jobs:
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
 
+      - name: Clean up existing bump branches
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          # Fetch all remote branches to get the latest list
+          git fetch origin
+
+          # Delete any existing bump-* branches to avoid conflicts
+          # The bump-packages action creates new branches
+          bump_branches=$(git branch -r | \
+            grep '^[[:space:]]*origin/bump-' | \
+            sed 's|origin/||; s/^[[:space:]]*//; s/[[:space:]]*$//' || true)
+
+          if [ -n "$bump_branches" ]; then
+            while IFS= read -r branch; do
+              [ -n "$branch" ] || continue
+              echo "Deleting remote branch: $branch"
+              git push origin --delete "$branch" || true
+            done <<< "$bump_branches"
+          else
+            echo "No bump branches to clean up"
+          fi
+
       - name: Bump packages
         uses: Homebrew/actions/bump-packages@876ff924bd08a9cb5f3cc6bc581054d6f545d0d5 # 2025-04-01, no tagged version
         with:
